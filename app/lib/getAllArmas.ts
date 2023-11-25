@@ -1,6 +1,6 @@
-export default async function getAllArmas(idCategoria: number) {
+export default async function getAllArmas(slug: string) {
   const token = process.env.STRAPI_TOKEN; // Reemplaza esto con tu token de acceso
-  const apiUrl = `https://strapi-production-9fca.up.railway.app/api/armas?populate=%2A&filters%5Bcategoria%5D=${idCategoria}`;
+  const apiUrl = ` https://strapi-production-9fca.up.railway.app/api/armas?populate=*&filters[categoria][slug]=${slug}`;
 
   const res = await fetch(apiUrl, {
     headers: {

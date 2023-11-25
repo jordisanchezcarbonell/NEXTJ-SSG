@@ -3,12 +3,30 @@ import getAllCategoria from "@/app/lib/getAllCategoria";
 import { Suspense } from "react";
 import ArmasPostsDentro from "./components/armasPosts";
 import getArmas from "@/app/lib/getArmas";
+import { Metadata } from "next";
 type Params = {
   params: {
-    categoria: number;
+    categoria: string;
     arma: string;
   };
 };
+export async function generateMetadata({
+  params: { arma },
+}: Params): Promise<Metadata> {
+  const armasData: Promise<ArmaResponse> = getArmas(arma);
+
+  const armasDataRespnse = await armasData;
+  if (!armasDataRespnse.data) {
+    return {
+      title: "categoria Not Found",
+    };
+  }
+  const value = armasDataRespnse.data[0].attributes.Titulo;
+  return {
+    title: value,
+    description: `This is the page of ${value}`,
+  };
+}
 
 export default async function UserPage({
   params: { categoria, arma },
@@ -30,7 +48,7 @@ export async function generateStaticParams() {
 
   const categoria = await categoriaData;
   return categoria.data.map((product) => ({
-    categoria: product.attributes.categoria.data.id.toString(),
+    categoria: product.attributes.categoria.data.attributes.slug,
     arma: product.attributes.slug,
   }));
 }

@@ -1,10 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 
-import { notFound, useParams } from "next/navigation";
-import getAllUsers from "@/app/lib/getAllUsers";
-import getUserPosts from "@/app/lib/getUserPosts";
-import getUser from "@/app/lib/getUsers";
+import { notFound } from "next/navigation";
 import getAllCategoria from "@/app/lib/getAllCategoria";
 import getCategoria from "@/app/lib/getCategoria";
 import getAllArmas from "@/app/lib/getAllArmas";
@@ -13,34 +10,32 @@ import { Link } from "@nextui-org/react";
 
 type Params = {
   params: {
-    categoria: number;
+    categoria: string;
+    idCategoria: number;
   };
 };
 
-// export async function generateMetadata({
-//   params: { userId },
-// }: Params): Promise<Metadata> {
-//   const userData: Promise<Categoria> = getCategoria(userId);
-//   const categoria: Categoria = await userData;
-//   if (!categoria.data) {
-//     return {
-//       title: "categoria Not Found",
-//     };
-//   }
+export async function generateMetadata({
+  params: { categoria },
+}: Params): Promise<Metadata> {
+  const categoriaData: Promise<CategoriaResponse> = getCategoria(categoria);
 
-//   return {
-//     title: categoria.data[0].attributes.categoria,
-//     description: `This is the page of ${categoria.data[0].attributes.categoria}`,
-//   };
-// }
+  const categoriaDataRespnse: Categoria = await categoriaData;
+  if (!categoriaDataRespnse.data) {
+    return {
+      title: "categoria Not Found",
+    };
+  }
+  const value = categoriaDataRespnse.data[0].attributes.titulo;
+  return {
+    title: value,
+    description: `This is the page of ${value}`,
+  };
+}
 
 export default async function UserPage({ params: { categoria } }: Params) {
   const armasData: Promise<DatosArmas> = getAllArmas(categoria);
   const categoriaData: Promise<CategoriaResponse> = getCategoria(categoria);
-
-  // const userPostsData: Promise<Post[]> = getUserPosts(userId);
-
-  //const [user, userPosts] = await Promise.all([userData, userPostsData])
 
   const categoriaDataResponse = await categoriaData;
 
@@ -50,16 +45,16 @@ export default async function UserPage({ params: { categoria } }: Params) {
     <div className="flex flex-col ">
       <p>test</p>
 
-      <h2>{categoriaDataResponse.data[0].attributes.categoria}</h2>
+      <h2>{categoriaDataResponse.data[0].attributes.titulo}</h2>
 
       <Suspense fallback={<h2>Loading...</h2>}>
         <ArmasPosts
-          categoria={categoriaDataResponse.data[0].id}
+          categoria={categoriaDataResponse.data[0].attributes.slug}
           promise={armasData}
         />
       </Suspense>
       <Link isBlock showAnchorIcon href={`/products`} color="secondary">
-        Secondary
+        back productos
       </Link>
     </div>
   );
@@ -70,6 +65,6 @@ export async function generateStaticParams() {
   const categoria = await categoriaData;
 
   return categoria.data.map((categoria) => ({
-    categoria: categoria.id.toString(),
+    categoria: categoria.attributes.slug,
   }));
 }

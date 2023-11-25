@@ -25,10 +25,10 @@ export default async function ArmasPostsDentro({ promise }: Props) {
       <Link
         isBlock
         showAnchorIcon
-        href={`/products/${posts.data[0].id}`}
+        href={`/products/${posts.data[0].attributes.categoria.data.attributes.slug}`}
         color="secondary"
       >
-        Secondary
+        back familia {posts.data[0].attributes.categoria.data.attributes.slug}
       </Link>
     </article>
   );

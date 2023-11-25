@@ -7,6 +7,7 @@ export default async function getAllArmasWithouCategory() {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json", // Puedes ajustar los encabezados según tus necesidades
     },
+    cache: "no-cache",
   });
 
   if (!res.ok) throw new Error("failed to fetch data");

@@ -1,6 +1,6 @@
-export default async function getCategoria(id: number) {
+export default async function getCategoria(slug: string) {
   const token = process.env.STRAPI_TOKEN; // Reemplaza esto con tu token de acceso
-  const apiUrl = `https://strapi-production-9fca.up.railway.app/api/categorias?filters[id]=${id}`;
+  const apiUrl = `https://strapi-production-9fca.up.railway.app/api/categorias?filters[slug]=${slug}`;
 
   const res = await fetch(apiUrl, {
     headers: {

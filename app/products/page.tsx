@@ -1,14 +1,13 @@
-import getAllUsers from "@/app/lib/getAllUsers";
 import type { Metadata } from "next";
-import Link from "next/link";
 import getAllCategoria from "../lib/getAllCategoria";
-import CardCustom from "../componente/card";
 import { Suspense } from "react";
+import React from "react";
+import RendeerProducts from "../componente/RendeerProducts";
+const Link = React.lazy(() => import("next/link"));
 
 export const metadata: Metadata = {
-  title: "Users",
+  title: "Products",
 };
-
 export default async function UsersPage() {
   const categoriaData: Promise<Categoria> = getAllCategoria();
   const categoria = await categoriaData;
@@ -22,13 +21,11 @@ export default async function UsersPage() {
       <Suspense fallback={<h2>Loading...</h2>}>
         {categoria.data.map((categoria) => {
           return (
-            <>
-              <Link key={categoria.id} href={`/products/${categoria.id}`}>
-                <CardCustom texto={categoria.attributes.categoria} />
-              </Link>
-
-              <br />
-            </>
+            <RendeerProducts
+              link={categoria.attributes.slug}
+              titulo={categoria.attributes.titulo}
+              key={categoria.id}
+            />
           );
         })}
       </Suspense>

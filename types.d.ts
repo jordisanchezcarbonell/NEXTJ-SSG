@@ -33,10 +33,11 @@ type Categoria = {
   data: {
     id: number;
     attributes: {
-      categoria: string;
       createdAt: string;
       updatedAt: string;
       publishedAt: string;
+      titulo: string;
+      slug: string;
     };
   }[];
   meta: {
@@ -131,7 +132,8 @@ type Arma = {
       data: {
         id: number;
         attributes: {
-          categoria: string;
+          titulo: string;
+          slug: string;
           createdAt: string;
           updatedAt: string;
           publishedAt: string;
@@ -156,7 +158,8 @@ type DatosArmas = {
 type CategoriaData = {
   id: number;
   attributes: {
-    categoria: string;
+    titulo: string;
+    slug: string;
     createdAt: string;
     updatedAt: string;
     publishedAt: string;

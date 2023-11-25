@@ -1,6 +1,6 @@
 type Props = {
   promise: Promise<DatosArmas>;
-  categoria: number;
+  categoria: string;
 };
 import { Image } from "@nextui-org/react";
 import { Link } from "@nextui-org/react";
